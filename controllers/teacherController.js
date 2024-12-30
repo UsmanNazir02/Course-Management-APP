@@ -35,3 +35,49 @@ exports.createTeacher = async (req, res) => {
         });
     }
 };
+
+//update teacher
+exports.updateTeacher = async (req, res) => {
+    try {
+        const teacher = await Teacher.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        if (!teacher) {
+            return res.status(404).json({
+                success: false,
+                message: 'Teacher not found',
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: teacher,
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Failed to update teacher',
+            error: error.message,
+        });
+    }
+}
+
+exports.deleteTeacher = async (req, res) => {
+    try {
+        const teacher = await Teacher.findByIdAndDelete(req.params.id);
+        if (!teacher) {
+            return res.status(404).json({
+                success: false,
+                message: 'Teacher not found',
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: {},
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Failed to delete teacher',
+            error: error.message,
+        });
+    }
+}

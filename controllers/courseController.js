@@ -87,3 +87,48 @@ exports.enrollStudent = async (req, res) => {
         });
     }
 };
+
+exports.updateCourse = async (req, res) => {
+    try {
+        const course = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        if (!course) {
+            return res.status(404).json({
+                success: false,
+                message: 'Course not found',
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: course,
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Failed to update course',
+            error: error.message,
+        });
+    }
+}
+
+exports.deleteCourse = async (req, res) => {
+    try {
+        const course = await Course.findByIdAndDelete(req.params.id);
+        if (!course) {
+            return res.status(404).json({
+                success: false,
+                message: 'Course not found',
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: {},
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Failed to delete course',
+            error: error.message,
+        });
+    }
+}
